@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+  <h1>Welcome, {{ username }}</h1>
+  <div class="sub">Your session is active and managed server-side.</div>
+  <div class="card">
+    <p style="margin-top:0;">2FA status:
+      <strong>{{ "Enabled" if is_2fa_enabled else "Disabled" }}</strong>
+    </p>
+    {% if is_2fa_enabled %}
+      <form method="POST" action="{{ url_for('disable_2fa_route') }}" style="margin-top:12px;">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <button type="submit" style="background:var(--red); color:var(--paper);">Disable 2FA</button>
+      </form>
+    {% else %}
+      <a href="{{ url_for('setup_2fa') }}"><button type="button" style="margin-top:12px;">Enable 2FA</button></a>
+    {% endif %}
+  </div>
+  <div class="foot">
+    <form method="POST" action="{{ url_for('logout') }}" style="margin-top:16px;">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <button type="submit">Log out</button>
+    </form>
+  </div>
+{% endblock %}
